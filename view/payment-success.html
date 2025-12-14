@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Processing Payment...</title>
+</head>
+<body>
+  <h2>Processing Payment...</h2>
+
+  <script>
+    async function checkPayment() {
+
+      const token = localStorage.getItem("token"); // ✅ get token
+      const orderId = new URLSearchParams(window.location.search).get("orderId");
+
+      if (!orderId) {
+        alert("Invalid payment callback!");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          "http://localhost:4000/api/payments/payment-status/" + orderId,
+          {
+            headers: {
+              "Authorization": "Bearer " + token   // ⭐ FIX: send token!
+            }
+          }
+        );
+
+        const data = await response.json();
+
+        console.log("Payment status:", data);
+
+        if (data.status === "SUCCESS") {
+
+          // Update premium in localStorage
+          localStorage.setItem("isPremium", "true");
+
+          alert("Payment Successful!");
+
+          window.location.href = "expense.html";
+        } else if (data.status === "FAILED") {
+
+          alert("Payment Failed :(");
+          window.location.href = "expense.html";
+        } else {
+          // still pending
+          setTimeout(checkPayment, 2000);
+        }
+
+      } catch (err) {
+        console.error("Error:", err);
+        alert("Something went wrong!");
+        window.location.href = "expense.html";
+      }
+    }
+
+    checkPayment();
+  </script>
+
+</body>
+</html>

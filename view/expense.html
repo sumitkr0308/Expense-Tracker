@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Expense Tracker</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    >
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header + Premium Button -->
+      <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <h1>Expense Tracker</h1>
+
+        <button id="premiumBtn" class="btn btn-warning">
+           Buy Premium Membership
+        </button>
+        <h3 id="premium-message" style="display:none; color: green; font-weight: bold;">
+          You are a premium user now!
+        </h3>
+        <button id="viewReportBtn" class="btn btn-info w-40  fw-bold">View Expense Report</button>
+        <button id="leaderboardBtn" class="btn btn-success" style="display:none;"> Show Leaderboard</button>
+        <button id="logout-btn" class="btn btn-primary">Logout</button>
+       </div> 
+      <!-- Expense Form -->
+      <form id="expenseForm" class="d-flex flex-wrap gap-2 align-items-center justify-content-center mb-4">
+        <label for="expName" class="form-label">Description:</label>
+        <input type="text" id="expName" required class="form-control-sm" />
+
+        <label for="amt" class="form-label">Amount:</label>
+        <input type="number" id="amt" required class="form-control-sm" />
+
+        <label for="note" class="form-label">Note:</label>
+        <input type="text" id="note" required class="form-control-sm" />
+
+    
+      
+
+        <button type="submit" class="btn btn-primary" id="AddBtn">Add Expense</button>
+      </form>
+    
+        
+    </div>
+  <div class="container mt-4">
+  <div class="row">
+     <div class="d-flex justify-content-end align-items-center gap-2 mb-4">
+        <label for="" class="fw-bold"> Select Expenses per page: </label>
+        <select name="pageLimitSelect" id="pageLimitSelect" class="form-select form-select-sm " style="width: 10vw;">
+           <option value="2">2</option>
+           <option value="5">5</option>
+           <option value="10">10</option>
+           <option value="15">15</option>
+        </select>
+
+      </div>
+    <!-- Expense List -->
+    <div class="col-md-6 d-flex justify-content-center">
+     
+      <ul id="expenseDisplay" class="list-group w-100"></ul>
+    </div>
+       <div class="d-flex justify-content-center mt-3 gap-2">
+        <button id="firstBtn" class="btn btn-secondary btn-sm">First</button>
+        <button id="prevBtn" class="btn btn-secondary btn-sm">Prev</button>
+
+        <span id="pageInfo" class="fw-bold align-self-center"></span>
+
+        <button id="nextBtn" class="btn btn-secondary btn-sm">Next</button>
+        <button id="lastBtn" class="btn btn-secondary btn-sm">Last</button>
+        </div>
+
+    <!-- Leaderboard -->
+    <div class="col-md-6 d-flex justify-content-center">
+      <div id="leaderboardContainer" class="w-100"></div>
+    </div>
+
+  </div>
+</div>
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../public/JS/script.js"></script>
+  </body>
+</html>
