@@ -242,33 +242,7 @@ expenseForm.addEventListener("submit", async (e) => {
   renderExpenses();
 });
 
-// async function sendExpenseToServer(expenseData, tempId) {
-//   try {
-//     const response = await fetch(API_URL, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: JSON.stringify(expenseData),
-//     });
 
-//     const savedExpense = await response.json();
-
-//     updateCategory(tempId, savedExpense);
-    
-//   } catch (err) {
-//     console.error("Error adding expense:", err);
-//   }
-// }
-
-// function updateCategory(tempId, savedExpense) {
-//   const element = document.querySelector(`[data-id="${tempId}"]`);
-//   if (!element) return;
-
-//   element.dataset.id = savedExpense.id;
-//   element.querySelector(".categoryBadge").textContent = savedExpense.category;
-// }
 
 
 // Add Item To UI

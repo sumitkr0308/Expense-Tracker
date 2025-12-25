@@ -162,11 +162,28 @@ const deleteExpense = async (req, res) => {
     res.status(500).json({ error: "Failed to delete expense" });
   }
 };
-
+const getReport=async(req,res)=>{
+  try {
+    console.log("REQ.USER 👉", req.user); 
+    const userId=req.user.userId;
+    
+  const expenses=await Expenses.findAll({
+    where:{
+      UserId:userId
+    },
+    order:[['createdAt','DESC']]
+  });
+  res.status(200).json({success:true,expenses})
+    
+  } catch (error) {
+    res.status(500).json({success:false,message: error.message})
+  }
+}
 module.exports = {
   getExpenseHome,
   getAllExpenses,
   addExpense,
   editExpense,
   deleteExpense,
+  getReport
 };

@@ -7,6 +7,8 @@ const authenticate=require("../middleware/auth")
 // fetch all expense
 router.get("/",authenticate,expenseController.getAllExpenses);
 
+// fetch report
+router.get('/report',authenticate,expenseController.getReport);
 // add expense
 router.post('/',authenticate,expenseController.addExpense);
 

@@ -48,8 +48,9 @@ const accessLogStream=fs.createWriteStream(path.join(__dirname,'access.log'),{
 
 app.use(morgan('combined',{stream:accessLogStream}));
 // Sync database
-db.sync({ alter: true })
+db.authenticate()
   .then(() => {
-    app.listen(port, () => console.log(` Server running on ${port}`));
+    console.log(" Database connected");
+    app.listen(port, () => console.log(` Server running on port ${port}`));
   })
   .catch(err => console.error(" Database error:", err));

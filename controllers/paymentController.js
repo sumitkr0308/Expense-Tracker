@@ -12,7 +12,7 @@ const createOrderController = async (req, res) => {
     const { amount } = req.body;
 
     const userId = req.user.userId;  // logged-in user
-    const customerPhone = "9999999999"; // OR pull from DB later
+    const customerPhone = "9999999999"; 
 
     if (!amount) {
       return res.status(400).json({
@@ -86,7 +86,7 @@ const getPaymentStatusController = async (req, res) => {
       { where: { orderId } }
     );
 
-    // ⭐ IF PAYMENT SUCCESS → MAKE USER PREMIUM
+    // IF PAYMENT SUCCESS → MAKE USER PREMIUM
     if (status === "SUCCESS") {
       const payment = await Payment.findOne({ where: { orderId } });
 
