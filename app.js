@@ -29,6 +29,8 @@ require("./models/signupUser");
 require("./models/expense");
 require("./models/order");
 require("./models/payment")
+require("./models/downloadedFile");
+
 
 
 // Routes
@@ -51,6 +53,9 @@ app.use(morgan('combined',{stream:accessLogStream}));
 db.authenticate()
   .then(() => {
     console.log(" Database connected");
+    return db.sync({ alter: true });
+  })
+  .then(() => {
     app.listen(port, () => console.log(` Server running on port ${port}`));
   })
   .catch(err => console.error(" Database error:", err));

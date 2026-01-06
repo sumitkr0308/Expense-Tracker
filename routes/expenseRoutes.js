@@ -9,6 +9,8 @@ router.get("/",authenticate,expenseController.getAllExpenses);
 
 // fetch report
 router.get('/report',authenticate,expenseController.getReport);
+// download report
+router.get('/download',authenticate,expenseController.downloadExpense);
 // add expense
 router.post('/',authenticate,expenseController.addExpense);
 

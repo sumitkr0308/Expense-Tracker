@@ -2,9 +2,11 @@ const path = require("path");
 const Expenses = require("../models/expense");
 const User = require("../models/signupUser");
 const { GoogleGenAI } = require("@google/genai");
-require("dotenv").config();
 const sequelize = require("../utils/db");
-const expense = require("../models/expense");
+const s3Services = require("../services/s3Services");
+const DownloadFile = require("../models/downloadedFile");
+
+
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -162,9 +164,31 @@ const deleteExpense = async (req, res) => {
     res.status(500).json({ error: "Failed to delete expense" });
   }
 };
+const downloadExpense=async(req,res)=>{
+  try {
+    const expenses = await Expenses.findAll({
+      where: { UserId: req.user.userId },
+    });
+    const stringfiedExpenses = JSON.stringify(expenses);
+    const fileName = `ExpenseReport_User_${req.user.userId}_${new Date().toISOString()}.txt`;
+    const fileURL = await s3Services.uploadToS3(stringfiedExpenses, fileName);
+    const savedDownloadFile = await DownloadFile.create({
+      fileURL: fileURL,
+      UserId: req.user.userId
+    });
+    console.log("Downloaded file record saved:", savedDownloadFile.dataValues);
+
+    console.log("File URL:", fileURL);
+    res.status(200).json({ fileURL, success: true });
+  } catch (error) {
+    console.log("Download expense error:", error);
+    res.status(500).json({ success: false });
+  }
+}
+
 const getReport=async(req,res)=>{
   try {
-    console.log("REQ.USER 👉", req.user); 
+  
     const userId=req.user.userId;
     
   const expenses=await Expenses.findAll({
@@ -179,11 +203,13 @@ const getReport=async(req,res)=>{
     res.status(500).json({success:false,message: error.message})
   }
 }
+
 module.exports = {
   getExpenseHome,
   getAllExpenses,
   addExpense,
   editExpense,
   deleteExpense,
-  getReport
+  getReport,
+  downloadExpense
 };

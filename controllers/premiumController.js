@@ -1,5 +1,6 @@
 const Expense = require("../models/expense");
 const User = require("../models/signupUser");
+const DownloadFile = require("../models/downloadedFile");
 const sequelize = require("../utils/db");
 
 exports.showLeaderboard = async (req, res) => {
@@ -39,4 +40,18 @@ exports.showLeaderboard = async (req, res) => {
     console.log(error);
     res.status(500).json({ message: "Server error", error });
   }
+};
+
+exports.getDownloadedFiles = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const downloadedFiles = await DownloadFile.findAll({
+      where: { UserId: userId },
+      order: [['createdAt', 'DESC']]
+    });
+    res.status(200).json({ success: true, files: downloadedFiles });
+  } catch (error) {
+    console.error("Error fetching downloaded files:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch downloaded files" });
+  }  
 };

@@ -9,20 +9,40 @@ if (!token) {
 const tableBody = document.getElementById("reportTable");
 const totalExpenseEl = document.getElementById("totalExpense");
 const downloadBtn=document.getElementById("downloadBtn");
+const downloadedFilesList=document.getElementById("downloadedFilesList");
+
+const API_BASE = "http://localhost:4000";
 
 
-downloadBtn.addEventListener("click",()=>{
-  if(downloadBtn.disabled)
-  {
-    alert("Only for Premium Users");
-    return;
+downloadBtn.addEventListener("click",async()=>{
+  try {
+      const response= await fetch(`${API_BASE}/api/expenses/download`,{
+    headers:{
+      Authorization:`Bearer ${token}`,
+    },
+  });
+      const data=await response.json();
+        if(!data.success)
+        {
+          alert("Download failed");
+          return;
+        } 
+    const a=document.createElement("a");
+    a.href=data.fileURL;
+    a.download="ExpenseReport.txt";
+    document.body.appendChild(a);
+    a.click();
+       document.body.removeChild(a);
   }
-  alert("Downloading is started!")
+  catch (error) {
+     console.error("Download error", error);
+  }
+
 })
 
 
 
-const API_BASE = "http://localhost:4000";
+
 
 // Fetch all expenses for report
 async function loadExpenseReport() {
@@ -34,7 +54,7 @@ async function loadExpenseReport() {
     });
 
     const data = await res.json();
-
+    console.log("Expense report data:", data);
     if (!data.success) {
       alert("Failed to load report");
       return;
@@ -83,8 +103,36 @@ async function checkPremiumStatus() {
   }
 }
 
+async function loadDownloadedFiles() {
+  try {
+    const response = await fetch(`${API_BASE}/premium/downloadedfiles`, {  
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!data.success) {
+      alert("Failed to load downloaded files");
+      return;
+    } 
+
+    downloadedFilesList.innerHTML = "";
+    data.files.forEach(file => {
+      const listItem = document.createElement("li");
+      const link = document.createElement("a");     
+      link.href = file.fileURL;
+      link.innerText = `Downloaded on: ${new Date(file.createdAt).toLocaleString()}`;
+      link.target = "_blank"; 
+      listItem.appendChild(link);
+      downloadedFilesList.appendChild(listItem);
+    });
+  } catch (error) {
+    console.error("Error loading downloaded files:", error);
+  }   
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadExpenseReport();
   await checkPremiumStatus();
+  await loadDownloadedFiles();
 });
